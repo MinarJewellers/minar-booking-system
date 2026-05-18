@@ -23,13 +23,14 @@ export async function sendVoodooSms(data: {
     body: JSON.stringify({
       to: data.phone,
       from: sender,
-      body: message,
+      msg: message,
     }),
   });
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`VOODOO SMS failed: ${errorText}`);
+    console.error("VOODOO SMS failed:", errorText);
+    return { error: errorText };
   }
 
   return response.json().catch(() => ({ ok: true }));
