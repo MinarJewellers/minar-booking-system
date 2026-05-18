@@ -68,7 +68,8 @@ export default function BookingPage() {
 
       setStatus("success");
       setMessage("Your appointment request has been received. A confirmation email and calendar invite will be sent shortly.");
-      event.currentTarget.reset();
+      const form = document.querySelector("form") as HTMLFormElement | null;
+form?.reset();
       setDate("");
       setSlots([]);
       setConsultationId(consultations[0].id);
