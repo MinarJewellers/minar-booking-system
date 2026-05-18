@@ -65,7 +65,7 @@ export async function createCalendarEvent(data: {
     calendarId,
     requestBody: {
       summary: `Minar Appointment - ${data.consultationTitle}`,
-      location: "Minar Jewellers, 39 Belgrave Road, Leicester, LE4 6AS",
+      location: "Minar Jewellers, 181 Upper Tooting Road, London SW17 7TG",
       description: [
         `Consultation: ${data.consultationTitle}`,
         `Customer: ${data.name}`,
