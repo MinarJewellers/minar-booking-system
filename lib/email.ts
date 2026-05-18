@@ -36,7 +36,7 @@ export async function sendConfirmationEmails(data: {
       <p><strong>Consultation:</strong> ${data.consultationTitle}<br>
       <strong>Date:</strong> ${data.date}<br>
       <strong>Time:</strong> ${data.time}<br>
-      <strong>Location:</strong> Minar Jewellers, 39 Belgrave Road, Leicester, LE4 6AS</p>
+      <strong>Location:</strong> Minar Jewellers, 181 Upper Tooting Road, London SW17 7TG</p>
       <p>We look forward to welcoming you.</p>
       <p>Minar Jewellers</p>
     </div>
