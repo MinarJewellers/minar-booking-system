@@ -26,29 +26,53 @@ export async function sendBookingEmails(data: {
     host,
     port,
     secure: port === 465,
-    auth: { user, pass },
+    auth: {
+      user,
+      pass,
+    },
   });
 
   const icsContent = createCalendarInvite(data);
 
   const customerHtml = `
-    <div style="font-family:Arial,sans-serif;color:#2b241f;line-height:1.6">
-      <h2 style="font-family:Georgia,serif;font-weight:400">Your appointment request has been received</h2>
+    <div style="font-family:Arial,sans-serif;color:#2b241f;line-height:1.7">
+      <h2 style="font-family:Georgia,serif;font-weight:400">
+        Your appointment request has been received
+      </h2>
+
       <p>Dear ${data.name},</p>
-      <p>Thank you for booking your appointment with Minar Jewellers.</p>
-      <p><strong>Consultation:</strong> ${data.consultationTitle}<br>
-      <strong>Date:</strong> ${data.date}<br>
-      <strong>Time:</strong> ${data.time}<br>
-      <strong>Location:</strong> Minar Jewellers, 181 Upper Tooting Road, London SW17 7TG</p>
-      <p>A calendar invitation is attached so you can add the appointment to your calendar.</p>
-      <p>We look forward to welcoming you.</p>
-      <p>Minar Jewellers</p>
+
+      <p>
+        Thank you for booking your appointment with Minar Jewellers.
+      </p>
+
+      <p>
+        <strong>Consultation:</strong> ${data.consultationTitle}<br>
+        <strong>Date:</strong> ${data.date}<br>
+        <strong>Time:</strong> ${data.time}<br>
+        <strong>Location:</strong> Minar Jewellers, 181 Upper Tooting Road, London SW17 7TG
+      </p>
+
+      <p>
+        A calendar invitation is attached to this email so you can add the appointment to your calendar.
+      </p>
+
+      <p>
+        We look forward to welcoming you.
+      </p>
+
+      <p>
+        Minar Jewellers
+      </p>
     </div>
   `;
 
   const adminHtml = `
-    <div style="font-family:Arial,sans-serif;color:#2b241f;line-height:1.6">
-      <h2>New Appointment Request</h2>
+    <div style="font-family:Arial,sans-serif;color:#2b241f;line-height:1.7">
+      <h2 style="font-family:Georgia,serif;font-weight:400">
+        New Appointment Request
+      </h2>
+
       <p><strong>Consultation:</strong> ${data.consultationTitle}</p>
       <p><strong>Name:</strong> ${data.name}</p>
       <p><strong>Email:</strong> ${data.email}</p>
@@ -57,23 +81,50 @@ export async function sendBookingEmails(data: {
       <p><strong>Date:</strong> ${data.date}</p>
       <p><strong>Time:</strong> ${data.time}</p>
       <p><strong>Notes:</strong> ${data.notes || "None"}</p>
-      <p>The calendar invitation is attached. Accept it to add the appointment to your calendar.</p>
+
+      <p>
+        A calendar invitation is attached to this email.
+      </p>
     </div>
   `;
 
+  const calendarAttachment = {
+    filename: "invite.ics",
+    content: icsContent,
+    contentType: "text/calendar; method=REQUEST; charset=UTF-8",
+  };
+
+  // CUSTOMER EMAIL
   await transporter.sendMail({
     from,
     to: data.email,
     subject: "Your Minar Jewellers appointment request",
     html: customerHtml,
-    icalEvent: { method: "REQUEST", content: icsContent },
+
+    alternatives: [
+      {
+        contentType: "text/calendar; method=REQUEST; charset=UTF-8",
+        content: icsContent,
+      },
+    ],
+
+    attachments: [calendarAttachment],
   });
 
+  // ADMIN EMAIL
   await transporter.sendMail({
     from,
     to: admin,
     subject: `New Minar appointment request - ${data.consultationTitle}`,
     html: adminHtml,
-    icalEvent: { method: "REQUEST", content: icsContent },
+
+    alternatives: [
+      {
+        contentType: "text/calendar; method=REQUEST; charset=UTF-8",
+        content: icsContent,
+      },
+    ],
+
+    attachments: [calendarAttachment],
   });
 }
