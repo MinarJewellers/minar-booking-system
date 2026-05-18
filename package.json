@@ -15,5 +15,7 @@
     "typescript": "latest",
     "googleapis": "latest"
   },
-  "devDependencies": {}
+  "devDependencies": {
+  "@types/nodemailer": "latest"
+}
 }
