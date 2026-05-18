@@ -5,23 +5,26 @@ export async function sendVoodooSms(data: {
   time: string;
 }) {
   const apiKey = process.env.VOODOO_API_KEY;
-  const apiSecret = process.env.VOODOO_API_SECRET;
   const sender = process.env.VOODOO_SENDER || "MINAR";
 
-  if (!apiKey || !apiSecret) {
-    console.warn("Missing VOODOO SMS credentials. SMS skipped.");
+  if (!apiKey) {
+    console.warn("Missing VOODOO API key. SMS skipped.");
     return { skipped: true };
   }
 
-  const message = `Minar Jewellers: Your ${data.consultationTitle} request has been received for ${data.date} at ${data.time}. We look forward to welcoming you.`;
+  const message = `Minar Jewellers: Your ${data.consultationTitle} request has been received for ${data.date} at ${data.time}.`;
 
   const response = await fetch("https://api.voodoosms.com/sendsms", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}:${apiSecret}`,
+      Authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({ to: data.phone, from: sender, body: message }),
+    body: JSON.stringify({
+      to: data.phone,
+      from: sender,
+      body: message,
+    }),
   });
 
   if (!response.ok) {
