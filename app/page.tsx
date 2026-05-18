@@ -189,7 +189,7 @@ export default function BookingPage() {
           <div>
             <p className="summary-title">Your Appointment</p>
             <p>{selectedConsultation?.title}</p>
-            <p>Minar Jewellers, 39 Belgrave Road, Leicester, LE4 6AS</p>
+            <p>Minar Jewellers, 181 Upper Tooting Road, London SW17 7TG</p>
           </div>
 
           <button className="submit" disabled={status === "loading"}>
